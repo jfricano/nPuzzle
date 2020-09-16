@@ -1,16 +1,17 @@
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.ResizingArrayQueue;
 
 public class Board {
   private int[][] tiles;
   private int n, hDist, mDist;
-  // Constructor. You may assume that the constructor receives an n-by-n array
-  // containing the n2 integers between 0 and n2 − 1, where 0 represents the blank
-  // square. You may also assume that 2 ≤ n < 128.
 
-  // create a board from an n-by-n array of tiles,
-  // where tiles[row][col] = tile at (row, col)
+  /**
+   * Initializes an n-puzzle board
+   * 
+   * @param tiles a 2D array of ints, arranged as [row][col]
+   */
   public Board(int[][] tiles) {
     n = tiles.length;
     this.tiles = new int[n][n];
@@ -21,7 +22,9 @@ public class Board {
     mDist = manhattan();
   }
 
-  // string representation of this board
+  /**
+   * Returns String representation of board as grid of ints
+   */
   public String toString() {
     StringBuilder s = new StringBuilder();
     s.append(n + "\n");
@@ -90,9 +93,39 @@ public class Board {
   // board can have 2, 3, or 4 neighbors.
 
   // all neighboring boards
-  // public Iterable<Board> neighbors() {
+  public Iterable<Board> neighbors() {
+    ResizingArrayQueue<Board> q = new ResizingArrayQueue<>();
 
-  // }
+    // iterate through the array
+    // check if that space is 0
+    // if so, add neighbors by checking left right up and down for a value
+    // if tehre is a value, swap it to a tmp array and add it to new board
+    // add taht board to the iterable
+
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        if (tiles[i][j] == 0) {
+          for (int row = i - 1; row <= i + 1; row += 2)
+            if (row >= 0 && row < n)
+              q.enqueue(getNeighbor(i, j, row, j));
+          for (int col = j - 1; col <= j + 1; col += 2)
+            if (col >= 0 && col < n)
+              q.enqueue(getNeighbor(i, j, i, col));
+        }
+      }
+    }
+    return q;
+  }
+
+  private Board getNeighbor(int emptyRow, int emptyCol, int swpRow, int swpCol) {
+    int[][] neighborTiles = new int[n][n];
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
+        neighborTiles[i][j] = tiles[i][j];
+    neighborTiles[emptyRow][emptyCol] = neighborTiles[swpRow][swpCol];
+    neighborTiles[swpRow][swpCol] = 0;
+    return new Board(neighborTiles);
+  }
 
   // a board that is obtained by exchanging any pair of tiles
   public Board twin() {
@@ -174,6 +207,21 @@ public class Board {
     // test twins
     StdOut.println("TWINS!\n" + b.toString() + '\n' + b.twin().toString());
 
+    StdOut.println();
+
     // test neighbors
+    int[] row10 = { 4, 1, 2 };
+    int[] row11 = { 8, 0, 5 };
+    int[] row12 = { 6, 7, 3 };
+    int[][] tiles4 = { row10, row11, row12 };
+    Board b4 = new Board(tiles4);
+    StdOut.println("NEIGHBORS!");
+    int i = 0;
+    for (Board board : b4.neighbors()) {
+      StdOut.println("Starting:");
+      StdOut.println(b4.toString());
+      StdOut.println("Neighbor" + (++i) + ":");
+      StdOut.println(board.toString());
+    }
   }
 }
