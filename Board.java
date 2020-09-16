@@ -4,15 +4,15 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.ResizingArrayQueue;
 
 public class Board {
-  private int[][] tiles;
-  private int n, hDist, mDist;
+  private final int[][] tiles;
+  private final int n, hDist, mDist;
 
   /**
    * Initializes an n-puzzle board
    * 
    * @param tiles a 2D array of ints, arranged as [row][col]
    */
-  public Board(int[][] tiles) {
+  public Board(final int[][] tiles) {
     n = tiles.length;
     this.tiles = new int[n][n];
     for (int i = 0; i < n; i++)
@@ -29,7 +29,7 @@ public class Board {
    *         top of grid
    */
   public String toString() {
-    StringBuilder s = new StringBuilder();
+    final StringBuilder s = new StringBuilder();
     s.append(n + "\n");
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++)
@@ -56,8 +56,8 @@ public class Board {
    */
   public int manhattan() {
     return distance((row, col) -> {
-      int properRow = properRow(tiles[row][col]);
-      int properCol = properCol(tiles[row][col]);
+      final int properRow = properRow(tiles[row][col]);
+      final int properCol = properCol(tiles[row][col]);
       return Math.abs(row - properRow) + Math.abs(col - properCol);
     });
   }
@@ -70,8 +70,8 @@ public class Board {
    */
   public int hamming() {
     return distance((row, col) -> {
-      int properRow = properRow(tiles[row][col]);
-      int properCol = properCol(tiles[row][col]);
+      final int properRow = properRow(tiles[row][col]);
+      final int properCol = properCol(tiles[row][col]);
       return row != properRow || col != properCol ? 1 : 0;
     });
   }
@@ -93,7 +93,7 @@ public class Board {
    * @return boolean value representing whether the passed object is a board
    *         identical to the instance
    */
-  public boolean equals(Object y) {
+  public boolean equals(final Object y) {
     if (y == this)
       return true;
     else if (y == null)
@@ -101,7 +101,7 @@ public class Board {
     else if (y.getClass() != this.getClass())
       return false;
     else {
-      Board that = (Board) y;
+      final Board that = (Board) y;
       return Arrays.deepEquals(this.tiles, that.tiles);
     }
   }
@@ -114,7 +114,7 @@ public class Board {
    *         possible from any given state)
    */
   public Iterable<Board> neighbors() {
-    ResizingArrayQueue<Board> q = new ResizingArrayQueue<>();
+    final ResizingArrayQueue<Board> q = new ResizingArrayQueue<>();
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
         if (tiles[i][j] == 0) {
@@ -141,7 +141,7 @@ public class Board {
   public Board twin() {
     Board twin;
     int swp;
-    int[][] newBoard = new int[n][n];
+    final int[][] newBoard = new int[n][n];
 
     for (int row = 0; row < n; row++)
       for (int col = 0; col < n; col++)
@@ -155,17 +155,17 @@ public class Board {
 
   // ************************ PRIVATE METHODS ************************
   // helper method to determine the goal row of the passed tile
-  private int properRow(int tile) {
+  private int properRow(final int tile) {
     return (tile - 1) / n;
   }
 
   // helper method to determine the goal column of the passed tile
-  private int properCol(int tile) {
+  private int properCol(final int tile) {
     return (tile - 1) % n;
   }
 
   // helper method to facilitate the Manhattan and Hamming distance methods
-  private int distance(BiFunction<Integer, Integer, Integer> func) {
+  private int distance(final BiFunction<Integer, Integer, Integer> func) {
     int count = 0;
     for (int row = 0; row < n; row++)
       for (int col = 0; col < n; col++)
@@ -175,8 +175,8 @@ public class Board {
 
   // helper function for neighbors()
   // performs the neighbor swap
-  private Board getNeighbor(int emptyRow, int emptyCol, int swpRow, int swpCol) {
-    int[][] neighborTiles = new int[n][n];
+  private Board getNeighbor(final int emptyRow, final int emptyCol, final int swpRow, final int swpCol) {
+    final int[][] neighborTiles = new int[n][n];
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
         neighborTiles[i][j] = tiles[i][j];
@@ -186,14 +186,14 @@ public class Board {
   }
 
   // ************************ unit testing ************************
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     // test out-of-place tiles
-    int[] row1 = { 0, 1, 2 };
-    int[] row2 = { 3, 4, 5 };
-    int[] row3 = { 6, 7, 8 };
-    int[][] tiles = { row1, row2, row3 };
+    final int[] row1 = { 0, 1, 2 };
+    final int[] row2 = { 3, 4, 5 };
+    final int[] row3 = { 6, 7, 8 };
+    final int[][] tiles = { row1, row2, row3 };
 
-    Board b = new Board(tiles);
+    final Board b = new Board(tiles);
     StdOut.println(b.toString());
     StdOut.println("n:\t3 == " + b.dimension());
     StdOut.println("manhattan:\t12 == " + b.manhattan());
@@ -203,11 +203,11 @@ public class Board {
     StdOut.println();
 
     // test in-place tiles
-    int[] row4 = { 1, 2, 3 };
-    int[] row5 = { 4, 5, 6 };
-    int[] row6 = { 7, 8, 0 };
-    int[][] tiles2 = { row4, row5, row6 };
-    Board b2 = new Board(tiles2);
+    final int[] row4 = { 1, 2, 3 };
+    final int[] row5 = { 4, 5, 6 };
+    final int[] row6 = { 7, 8, 0 };
+    final int[][] tiles2 = { row4, row5, row6 };
+    final Board b2 = new Board(tiles2);
     StdOut.println(b2.toString());
     StdOut.println("n:\t3 == " + b2.dimension());
     StdOut.println("manhattan:\t0 == " + b2.manhattan());
@@ -217,11 +217,11 @@ public class Board {
     StdOut.println();
 
     // test equals()
-    int[] row7 = { 0, 1, 2 };
-    int[] row8 = { 3, 4, 5 };
-    int[] row9 = { 6, 7, 8 };
-    int[][] tiles3 = { row7, row8, row9 };
-    Board b3 = new Board(tiles3);
+    final int[] row7 = { 0, 1, 2 };
+    final int[] row8 = { 3, 4, 5 };
+    final int[] row9 = { 6, 7, 8 };
+    final int[][] tiles3 = { row7, row8, row9 };
+    final Board b3 = new Board(tiles3);
     StdOut.println("equals():\tfalse == " + b.equals(b2));
     StdOut.println("equals():\ttrue == " + b.equals(b3));
 
@@ -233,14 +233,14 @@ public class Board {
     StdOut.println();
 
     // test neighbors
-    int[] row10 = { 4, 1, 2 };
-    int[] row11 = { 8, 0, 5 };
-    int[] row12 = { 6, 7, 3 };
-    int[][] tiles4 = { row10, row11, row12 };
-    Board b4 = new Board(tiles4);
+    final int[] row10 = { 4, 1, 2 };
+    final int[] row11 = { 8, 0, 5 };
+    final int[] row12 = { 6, 7, 3 };
+    final int[][] tiles4 = { row10, row11, row12 };
+    final Board b4 = new Board(tiles4);
     StdOut.println("NEIGHBORS!");
     int i = 0;
-    for (Board board : b4.neighbors()) {
+    for (final Board board : b4.neighbors()) {
       StdOut.println("Starting:");
       StdOut.println(b4.toString());
       StdOut.println("Neighbor" + (++i) + ":");
