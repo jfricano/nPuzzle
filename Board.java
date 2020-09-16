@@ -2,6 +2,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Board {
   private int[][] tiles;
+  private int dimension;
   // Constructor. You may assume that the constructor receives an n-by-n array
   // containing the n2 integers between 0 and n2 − 1, where 0 represents the blank
   // square. You may also assume that 2 ≤ n < 128.
@@ -9,7 +10,13 @@ public class Board {
   // create a board from an n-by-n array of tiles,
   // where tiles[row][col] = tile at (row, col)
   public Board(int[][] tiles) {
-    this.tiles = tiles;
+    dimension = tiles.length;
+    this.tiles = new int[dimension][dimension];
+    for (int i = 0; i < dimension; i++) {
+      for (int j = 0; j < dimension; j++) {
+        this.tiles[i][j] = tiles[i][j];
+      }
+    }
   }
 
   // string representation of this board
@@ -18,7 +25,7 @@ public class Board {
     for (int i = 0; i < tiles.length; i++) {
       for (int j = 0; j < tiles[i].length; j++) {
         output += tiles[i][j];
-        // if j mod  tiles[i].length == tiles[i].length - 1 add newline
+        // if j mod tiles[i].length == tiles[i].length - 1 add newline
         // else add space
         output += j % tiles[i].length == tiles[i].length - 1 ? '\n' : "  ";
       }
@@ -28,7 +35,7 @@ public class Board {
 
   // board dimension n
   public int dimension() {
-    return tiles.length;
+    return dimension;
   }
 
   // Hamming and Manhattan distances. To measure how close a board is to the goal
@@ -42,27 +49,58 @@ public class Board {
   // any situation where you are recomputing the same quantity many times and for
   // which computing that quantity is a bottleneck operation.
 
-  
   // The Hamming distance betweeen a board and the goal board is the number of
   // tiles in the wrong position.
 
   // number of tiles out of place
-  public int hamming() {
-    return 0;
-  }
+  // public int hamming() {
+  //   int count = 0;
+  //   for (int i = 0; i < dimension(); i++) {
+  //     if (i == dimension() - 1 && tiles[i][dimension() - 1] != 0) {
+  //       count++;
+  //     }
+  //     for (int j = 0; j < tiles[i].length; j++) {
+  //       if (i == dimension() - 1 && j == dimension() - 1)
+  //         continue;
+  //       if (i == dimension() - 1 && j == dimension() - 1 && tiles[i][j] != 0)
+  //         count++;
+  //     }
+  //   }
+  //   return count;
+  // }
 
   // The Manhattan distance between a board and the goal board is the sum of the
   // Manhattan distances (sum of the vertical and horizontal distance) from the
   // tiles to their goal positions.
 
   // sum of Manhattan distances between tiles and goal
-  public int manhattan() {
-    return 0;
-  }
+  // public int manhattan() {
+  //   int count = 0;
+  //   for (int i = 0; i < tiles.length; i++) {
+  //     for (int j = 0; j < tiles[i].length; j++) {
+  //       // if tile is 0
+  //       if (tiles[i][j] == 0) count += (tiles.length - i) + (tiles[i].length - j);
+  //       // if tile is not 0
+  //     }
+  //   }
+  //   return count;
+  // }
 
   // is this board the goal board?
   public boolean isGoal() {
-    return false;
+    int lastPos = dimension - 1;
+    for (int i = 0; i < dimension; i++) {
+      if (i == lastPos && tiles[i][lastPos] != 0) {
+        return false;
+      }
+      for (int j = 0; j < dimension; j++) {
+        if (i == lastPos && j == lastPos)
+          continue;
+        if (i == lastPos && j == lastPos && tiles[i][j] != 0)
+          return false;
+      }
+    }
+    return true;
   }
 
   // does this board equal y?
@@ -88,7 +126,7 @@ public class Board {
 
   // a board that is obtained by exchanging any pair of tiles
   // public Board twin() {
-  //   return new Board();
+  // return new Board();
   // }
 
   // Performance requirements. Your implementation should support all Board
@@ -97,23 +135,31 @@ public class Board {
   // unit testing (not graded)
   public static void main(String[] args) {
     // test constructor, toSTring()
-    int[] row1 = {0, 1, 2};
-    int[] row2 = {3, 4, 5};
-    int[] row3 = {6, 7, 8};
-    int[][] tiles = {row1, row2, row3};
+    int[] row1 = { 0, 1, 2 };
+    int[] row2 = { 3, 4, 5 };
+    int[] row3 = { 6, 7, 8 };
+    int[][] tiles = { row1, row2, row3 };
 
     Board b = new Board(tiles);
     StdOut.println(b.toString());
 
     // test dimension
     StdOut.println("dimension:  " + b.dimension());
+    StdOut.println();
+
+    // test isGoal
+    StdOut.println("isGoal(): false == " + b.isGoal());
+    int[] row4 = { 1, 2, 3 };
+    int[] row5 = { 4, 5, 6 };
+    int[] row6 = { 7, 8, 0 };
+    int[][] tiles2 = { row4, row5, row6 };
+    b = new Board(tiles2);
+    StdOut.println("isGoal(): true == " + b.isGoal());
 
     // test hamming
     // test manhattan
-    // test isGoal
     // test equals
     // test neighbors
     // test twin
   }
-
 }
