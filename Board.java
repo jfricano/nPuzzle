@@ -78,17 +78,25 @@ public class Board {
   // tiles to their goal positions.
 
   // sum of Manhattan distances between tiles and goal
-  // public int manhattan() {
-  // int count = 0;
-  // for (int i = 0; i < tiles.length; i++) {
-  // for (int j = 0; j < tiles[i].length; j++) {
-  // // if tile is 0
-  // if (tiles[i][j] == 0) count += (tiles.length - i) + (tiles[i].length - j);
-  // // if tile is not 0
-  // }
-  // }
-  // return count;
-  // }
+  public int hamming() {
+    int count = 0;
+    int properRow, properCol, tile;
+
+    for (int row = 0; row < dimension; row++) {
+      for (int col = 0; col < dimension; col++) {
+        tile = tiles[row][col];
+        if (tile == 0) {
+          properRow = dimension - 1;
+          properCol = dimension - 1;
+        } else {
+          properRow = (tile - 1) / dimension;
+          properCol = (tile - 1) % dimension;
+        }
+        count += row != properRow || col != properCol ? 1 : 0;
+      }
+    }
+    return count;
+  }
 
   // is this board the goal board?
   public boolean isGoal() {
@@ -134,12 +142,13 @@ public class Board {
 
     Board b = new Board(tiles);
     StdOut.println(b.toString());
-    StdOut.println("dimension:  " + b.dimension());
-    StdOut.println("manhattan: 9 == " + b.manhattan());
-    StdOut.println("isGoal(): false == " + b.isGoal());
-
+    StdOut.println("dimension:\t3 == " + b.dimension());
+    StdOut.println("manhattan:\t16 == " + b.manhattan());
+    StdOut.println("hamming:\t9 == " + b.hamming());
+    StdOut.println("isGoal():\tfalse == " + b.isGoal());
+    
     StdOut.println();
-
+    
     // test in-place tiles
     int[] row4 = { 1, 2, 3 };
     int[] row5 = { 4, 5, 6 };
@@ -147,9 +156,10 @@ public class Board {
     int[][] tiles2 = { row4, row5, row6 };
     Board b2 = new Board(tiles2);
     StdOut.println(b2.toString());
-    StdOut.println("dimension:  " + b2.dimension());
-    StdOut.println("manhattan: 0 == " + b2.manhattan());
-    StdOut.println("isGoal(): true == " + b2.isGoal());
+    StdOut.println("dimension:\t3 == " + b2.dimension());
+    StdOut.println("manhattan:\t0 == " + b2.manhattan());
+    StdOut.println("hamming:\t0 == " + b2.hamming());
+    StdOut.println("isGoal():\ttrue == " + b2.isGoal());
 
     // test hamming
     // test equals
