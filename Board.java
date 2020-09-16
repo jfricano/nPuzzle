@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.function.BiFunction;
 import edu.princeton.cs.algs4.StdOut;
 
@@ -96,10 +97,18 @@ public class Board {
   }
 
   // does this board equal y?
-  // public boolean equals(Object y) {
-  // // return hDist == ((Board)y).hamming();
-  // return this.equals(y);
-  // }
+  public boolean equals(Object y) {
+    if (y == this)
+      return true;
+    else if (y == null)
+      return false;
+    else if (y.getClass() != this.getClass())
+      return false;
+    else {
+      Board that = (Board) y;
+      return Arrays.deepEquals(this.tiles, that.tiles);
+    }
+  }
 
   // Neighboring boards. The neighbors() method returns an iterable containing the
   // neighbors of the board. Depending on the location of the blank square, a
@@ -183,7 +192,7 @@ public class Board {
     Board b3 = new Board(tiles3);
     StdOut.println("equals():\tfalse == " + b.equals(b2));
     StdOut.println("equals():\ttrue == " + b.equals(b3));
-    // test equals
+
     // test neighbors
     // test twin
   }
