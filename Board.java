@@ -1,5 +1,7 @@
-public class Board {
+import edu.princeton.cs.algs4.StdOut;
 
+public class Board {
+  private int[][] tiles;
   // Constructor. You may assume that the constructor receives an n-by-n array
   // containing the n2 integers between 0 and n2 − 1, where 0 represents the blank
   // square. You may also assume that 2 ≤ n < 128.
@@ -7,17 +9,26 @@ public class Board {
   // create a board from an n-by-n array of tiles,
   // where tiles[row][col] = tile at (row, col)
   public Board(int[][] tiles) {
-
+    this.tiles = tiles;
   }
 
   // string representation of this board
   public String toString() {
-    return "";
+    String output = "";
+    for (int i = 0; i < tiles.length; i++) {
+      for (int j = 0; j < tiles[i].length; j++) {
+        output += tiles[i][j];
+        // if j mod  tiles[i].length == tiles[i].length - 1 add newline
+        // else add space
+        output += j % tiles[i].length == tiles[i].length - 1 ? '\n' : "  ";
+      }
+    }
+    return output;
   }
 
   // board dimension n
   public int dimension() {
-    return 0;
+    return tiles.length;
   }
 
   // Hamming and Manhattan distances. To measure how close a board is to the goal
@@ -71,21 +82,38 @@ public class Board {
   // as the board of the previous search node in the game tree.
 
   // all neighboring boards
-  public Iterable<Board> neighbors() {
+  // public Iterable<Board> neighbors() {
 
-  }
+  // }
 
   // a board that is obtained by exchanging any pair of tiles
-  public Board twin() {
-    return new Board();
-  }
+  // public Board twin() {
+  //   return new Board();
+  // }
 
   // Performance requirements. Your implementation should support all Board
   // methods in time proportional to n2 (or better) in the worst case.
 
   // unit testing (not graded)
   public static void main(String[] args) {
+    // test constructor, toSTring()
+    int[] row1 = {0, 1, 2};
+    int[] row2 = {3, 4, 5};
+    int[] row3 = {6, 7, 8};
+    int[][] tiles = {row1, row2, row3};
 
+    Board b = new Board(tiles);
+    StdOut.println(b.toString());
+
+    // test dimension
+    StdOut.println("dimension:  " + b.dimension());
+
+    // test hamming
+    // test manhattan
+    // test isGoal
+    // test equals
+    // test neighbors
+    // test twin
   }
 
 }
