@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.ResizingArrayQueue;
 
 public class Board {
   private final int[][] tiles;
-  private final int n, hDist, mDist;
+  private final int n, mDist;
 
   /**
    * Initializes an n-puzzle board
@@ -18,7 +18,7 @@ public class Board {
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
         this.tiles[i][j] = tiles[i][j];
-    hDist = hamming();
+    // hDist = hamming();
     mDist = manhattan();
   }
 
