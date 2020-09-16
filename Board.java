@@ -57,7 +57,12 @@ public class Board {
 
   // number of tiles out of place
   public int manhattan() {
-    return distance((row, col) -> Math.abs(row - properRow(tiles[row][col])) + Math.abs(col - properCol(tiles[row][col])));
+    return distance((row, col) -> {
+      int properRow = properRow(tiles[row][col]);
+      int properCol = properCol(tiles[row][col]);
+      return Math.abs(row - properRow) 
+             + Math.abs(col - properCol);
+    });
   }
 
   // The Manhattan distance between a board and the goal board is the sum of the
@@ -66,9 +71,12 @@ public class Board {
 
   // sum of Manhattan distances between tiles and goal
   public int hamming() {
-    return distance((row, col) -> row != properRow(tiles[row][col]) || col != properCol(tiles[row][col]) ? 1 : 0);
+    return distance((row, col) -> {
+      int properRow = properRow(tiles[row][col]);
+      int properCol = properCol(tiles[row][col]);
+      return row != properRow || col != properCol ? 1 : 0;
+    });
   }
-
 
   // is this board the goal board?
   public boolean isGoal() {
