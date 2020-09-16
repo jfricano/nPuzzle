@@ -14,11 +14,9 @@ public class Board {
   public Board(int[][] tiles) {
     n = tiles.length;
     this.tiles = new int[n][n];
-    for (int i = 0; i < n; i++) {
-      for (int j = 0; j < n; j++) {
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
         this.tiles[i][j] = tiles[i][j];
-      }
-    }
     hDist = hamming();
     mDist = manhattan();
   }
@@ -28,9 +26,8 @@ public class Board {
     StringBuilder s = new StringBuilder();
     s.append(n + "\n");
     for (int i = 0; i < n; i++) {
-      for (int j = 0; j < n; j++) {
+      for (int j = 0; j < n; j++)
         s.append(String.format("%2d ", tiles[i][j]));
-      }
       s.append("\n");
     }
     return s.toString();
@@ -99,8 +96,17 @@ public class Board {
 
   // a board that is obtained by exchanging any pair of tiles
   public Board twin() {
-    Board twin = new Board(n);
-
+    Board twin;
+    int swp;
+    int[][] newBoard = new int[n][n];
+    for (int row = 0; row < n; row++)
+      for (int col = 0; col < n; col++)
+        newBoard[row][col] = this.tiles[row][col];
+    twin = new Board(newBoard);
+    swp = twin.tiles[0][0];
+    twin.tiles[0][0] = twin.tiles[0][1];
+    twin.tiles[0][1] = swp;
+    return twin;
   }
 
   // ************************ PRIVATE METHODS ************************
@@ -114,11 +120,9 @@ public class Board {
 
   private int distance(BiFunction<Integer, Integer, Integer> func) {
     int count = 0;
-    for (int row = 0; row < n; row++) {
-      for (int col = 0; col < n; col++) {
+    for (int row = 0; row < n; row++)
+      for (int col = 0; col < n; col++)
         count += tiles[row][col] == 0 ? 0 : func.apply(row, col);
-      }
-    }
     return count;
   }
 
@@ -165,7 +169,11 @@ public class Board {
     StdOut.println("equals():\tfalse == " + b.equals(b2));
     StdOut.println("equals():\ttrue == " + b.equals(b3));
 
+    StdOut.println();
+
+    // test twins
+    StdOut.println("TWINS!\n" + b.toString() + '\n' + b.twin().toString());
+
     // test neighbors
-    // test twin
   }
 }
