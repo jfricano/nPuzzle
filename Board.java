@@ -1,3 +1,5 @@
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Board {
@@ -54,23 +56,7 @@ public class Board {
 
   // number of tiles out of place
   public int manhattan() {
-    int count = 0;
-    int properRow, properCol, tile;
-
-    for (int row = 0; row < dimension; row++) {
-      for (int col = 0; col < dimension; col++) {
-        tile = tiles[row][col];
-        if (tile == 0) {
-          properRow = dimension - 1;
-          properCol = dimension - 1;
-        } else {
-          properRow = (tile - 1) / dimension;
-          properCol = (tile - 1) % dimension;
-        }
-        count += Math.abs(row - properRow) + Math.abs(col - properCol);
-      }
-    }
-    return count;
+    return distance((row, col) -> Math.abs(row - properRow(tiles[row][col])) + Math.abs(col - properCol(tiles[row][col])));
   }
 
   // The Manhattan distance between a board and the goal board is the sum of the
@@ -79,24 +65,9 @@ public class Board {
 
   // sum of Manhattan distances between tiles and goal
   public int hamming() {
-    int count = 0;
-    int properRow, properCol, tile;
-
-    for (int row = 0; row < dimension; row++) {
-      for (int col = 0; col < dimension; col++) {
-        tile = tiles[row][col];
-        if (tile == 0) {
-          properRow = dimension - 1;
-          properCol = dimension - 1;
-        } else {
-          properRow = (tile - 1) / dimension;
-          properCol = (tile - 1) % dimension;
-        }
-        count += row != properRow || col != properCol ? 1 : 0;
-      }
-    }
-    return count;
+    return distance((row, col) -> row != properRow(tiles[row][col]) || col != properCol(tiles[row][col]) ? 1 : 0);
   }
+
 
   // is this board the goal board?
   public boolean isGoal() {
@@ -129,6 +100,26 @@ public class Board {
   // return new Board();
   // }
 
+  // ************************ PRIVATE METHODS ********************************
+  private int properRow(int tile) {
+    return tile == 0 ? dimension - 1 : (tile - 1) / dimension;
+  }
+
+  private int properCol(int tile) {
+    return tile == 0 ? dimension - 1 : (tile - 1) % dimension;
+  }
+
+  private int distance(BiFunction<Integer, Integer, Integer> func) {
+    int count = 0;
+
+    for (int row = 0; row < dimension; row++) {
+      for (int col = 0; col < dimension; col++) {
+        count += func.apply(row, col);
+      }
+    }
+    return count;
+  }
+
   // Performance requirements. Your implementation should support all Board
   // methods in time proportional to n2 (or better) in the worst case.
 
@@ -146,9 +137,9 @@ public class Board {
     StdOut.println("manhattan:\t16 == " + b.manhattan());
     StdOut.println("hamming:\t9 == " + b.hamming());
     StdOut.println("isGoal():\tfalse == " + b.isGoal());
-    
+
     StdOut.println();
-    
+
     // test in-place tiles
     int[] row4 = { 1, 2, 3 };
     int[] row5 = { 4, 5, 6 };
