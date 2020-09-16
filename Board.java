@@ -23,17 +23,30 @@ public class Board {
   }
 
   // string representation of this board
+  // public String toString() {
+  // String output = "";
+  // for (int i = 0; i < dimension; i++) {
+  // for (int j = 0; j < dimension; j++) {
+  // output += tiles[i][j];
+  // // if j mod tiles[i].length == tiles[i].length - 1 add newline
+  // // else add space
+  // output += j % dimension == dimension - 1 ? (i % dimension == dimension - 1 ?
+  // "" : "\n") : " ";
+  // }
+  // }
+  // return output;
+  // }
+
   public String toString() {
-    String output = "";
+    StringBuilder s = new StringBuilder();
+    s.append(dimension + "\n");
     for (int i = 0; i < dimension; i++) {
       for (int j = 0; j < dimension; j++) {
-        output += tiles[i][j];
-        // if j mod tiles[i].length == tiles[i].length - 1 add newline
-        // else add space
-        output += j % dimension == dimension - 1 ? (i % dimension == dimension - 1 ? "" : "\n") : "  ";
+        s.append(String.format("%2d ", tiles[i][j]));
       }
+      s.append("\n");
     }
-    return output;
+    return s.toString();
   }
 
   // board dimension n
@@ -60,8 +73,7 @@ public class Board {
     return distance((row, col) -> {
       int properRow = properRow(tiles[row][col]);
       int properCol = properCol(tiles[row][col]);
-      return Math.abs(row - properRow) 
-             + Math.abs(col - properCol);
+      return Math.abs(row - properRow) + Math.abs(col - properCol);
     });
   }
 
@@ -80,13 +92,14 @@ public class Board {
 
   // is this board the goal board?
   public boolean isGoal() {
-    return manhattan() == 0;
+    return mDist == 0;
   }
 
   // does this board equal y?
-  public boolean equals(Object y) {
-    return false;
-  }
+  // public boolean equals(Object y) {
+  // // return hDist == ((Board)y).hamming();
+  // return this.equals(y);
+  // }
 
   // Neighboring boards. The neighbors() method returns an iterable containing the
   // neighbors of the board. Depending on the location of the blank square, a
@@ -111,18 +124,18 @@ public class Board {
 
   // ************************ PRIVATE METHODS ************************
   private int properRow(int tile) {
-    return tile == 0 ? dimension - 1 : (tile - 1) / dimension;
+    return (tile - 1) / dimension;
   }
 
   private int properCol(int tile) {
-    return tile == 0 ? dimension - 1 : (tile - 1) % dimension;
+    return (tile - 1) % dimension;
   }
 
   private int distance(BiFunction<Integer, Integer, Integer> func) {
     int count = 0;
     for (int row = 0; row < dimension; row++) {
       for (int col = 0; col < dimension; col++) {
-        count += func.apply(row, col);
+        count += tiles[row][col] == 0 ? 0 : func.apply(row, col);
       }
     }
     return count;
@@ -142,8 +155,8 @@ public class Board {
     Board b = new Board(tiles);
     StdOut.println(b.toString());
     StdOut.println("dimension:\t3 == " + b.dimension());
-    StdOut.println("manhattan:\t16 == " + b.manhattan());
-    StdOut.println("hamming:\t9 == " + b.hamming());
+    StdOut.println("manhattan:\t12 == " + b.manhattan());
+    StdOut.println("hamming:\t8 == " + b.hamming());
     StdOut.println("isGoal():\tfalse == " + b.isGoal());
 
     StdOut.println();
@@ -160,6 +173,16 @@ public class Board {
     StdOut.println("hamming:\t0 == " + b2.hamming());
     StdOut.println("isGoal():\ttrue == " + b2.isGoal());
 
+    StdOut.println();
+
+    // test equals()
+    int[] row7 = { 0, 1, 2 };
+    int[] row8 = { 3, 4, 5 };
+    int[] row9 = { 6, 7, 8 };
+    int[][] tiles3 = { row7, row8, row9 };
+    Board b3 = new Board(tiles3);
+    StdOut.println("equals():\tfalse == " + b.equals(b2));
+    StdOut.println("equals():\ttrue == " + b.equals(b3));
     // test equals
     // test neighbors
     // test twin
