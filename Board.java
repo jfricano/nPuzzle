@@ -124,6 +124,7 @@ public class Board {
           for (int col = j - 1; col <= j + 1; col += 2)
             if (col >= 0 && col < n)
               q.enqueue(getNeighbor(i, j, i, col));
+          break;
         }
       }
     }
@@ -141,6 +142,7 @@ public class Board {
     Board twin;
     int swp;
     int[][] newBoard = new int[n][n];
+
     for (int row = 0; row < n; row++)
       for (int col = 0; col < n; col++)
         newBoard[row][col] = this.tiles[row][col];
