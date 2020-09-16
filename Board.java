@@ -24,20 +24,6 @@ public class Board {
   }
 
   // string representation of this board
-  // public String toString() {
-  // String output = "";
-  // for (int i = 0; i < n; i++) {
-  // for (int j = 0; j < n; j++) {
-  // output += tiles[i][j];
-  // // if j mod tiles[i].length == tiles[i].length - 1 add newline
-  // // else add space
-  // output += j % n == n - 1 ? (i % n == n - 1 ?
-  // "" : "\n") : " ";
-  // }
-  // }
-  // return output;
-  // }
-
   public String toString() {
     StringBuilder s = new StringBuilder();
     s.append(n + "\n");
@@ -57,14 +43,6 @@ public class Board {
 
   // Hamming and Manhattan distances. To measure how close a board is to the goal
   // board, we define two notions of distance.
-
-  // Caching the Hamming and Manhattan priorities. To avoid recomputing the
-  // Manhattan priority of a search node from scratch each time during various
-  // priority queue operations, pre-compute its value when you construct the
-  // search node; save it in an instance variable; and return the saved value as
-  // needed. This caching technique is broadly applicable: consider using it in
-  // any situation where you are recomputing the same quantity many times and for
-  // which computing that quantity is a bottleneck operation.
 
   // The Hamming distance betweeen a board and the goal board is the number of
   // tiles in the wrong position.
@@ -114,22 +92,16 @@ public class Board {
   // neighbors of the board. Depending on the location of the blank square, a
   // board can have 2, 3, or 4 neighbors.
 
-  // The critical optimization. A* search has one annoying feature: search nodes
-  // corresponding to the same board are enqueued on the priority queue many times
-  // (e.g., the bottom-left search node in the game-tree diagram above). To reduce
-  // unnecessary exploration of useless search nodes, when considering the
-  // neighbors of a search node, don’t enqueue a neighbor if its board is the same
-  // as the board of the previous search node in the game tree.
-
   // all neighboring boards
   // public Iterable<Board> neighbors() {
 
   // }
 
   // a board that is obtained by exchanging any pair of tiles
-  // public Board twin() {
-  // return new Board();
-  // }
+  public Board twin() {
+    Board twin = new Board(n);
+
+  }
 
   // ************************ PRIVATE METHODS ************************
   private int properRow(int tile) {
