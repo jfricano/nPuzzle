@@ -1,10 +1,9 @@
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Board {
   private int[][] tiles;
-  private int dimension;
+  private int dimension, hDist, mDist;
   // Constructor. You may assume that the constructor receives an n-by-n array
   // containing the n2 integers between 0 and n2 − 1, where 0 represents the blank
   // square. You may also assume that 2 ≤ n < 128.
@@ -19,6 +18,8 @@ public class Board {
         this.tiles[i][j] = tiles[i][j];
       }
     }
+    hDist = hamming();
+    mDist = manhattan();
   }
 
   // string representation of this board
@@ -100,7 +101,7 @@ public class Board {
   // return new Board();
   // }
 
-  // ************************ PRIVATE METHODS ********************************
+  // ************************ PRIVATE METHODS ************************
   private int properRow(int tile) {
     return tile == 0 ? dimension - 1 : (tile - 1) / dimension;
   }
@@ -111,7 +112,6 @@ public class Board {
 
   private int distance(BiFunction<Integer, Integer, Integer> func) {
     int count = 0;
-
     for (int row = 0; row < dimension; row++) {
       for (int col = 0; col < dimension; col++) {
         count += func.apply(row, col);
@@ -152,7 +152,6 @@ public class Board {
     StdOut.println("hamming:\t0 == " + b2.hamming());
     StdOut.println("isGoal():\ttrue == " + b2.isGoal());
 
-    // test hamming
     // test equals
     // test neighbors
     // test twin
