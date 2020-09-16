@@ -23,7 +23,10 @@ public class Board {
   }
 
   /**
-   * Returns String representation of board as grid of ints
+   * Returns the String representation of the board as a grid
+   * 
+   * @return String representation of board as a grid, dimension is identified at
+   *         top of grid
    */
   public String toString() {
     StringBuilder s = new StringBuilder();
@@ -36,18 +39,21 @@ public class Board {
     return s.toString();
   }
 
-  // board n n
+  /**
+   * Returns the n dimension of an n x n board
+   * 
+   * @return Dimension n, of n x n board
+   */
   public int dimension() {
     return n;
   }
 
-  // Hamming and Manhattan distances. To measure how close a board is to the goal
-  // board, we define two notions of distance.
-
-  // The Hamming distance betweeen a board and the goal board is the number of
-  // tiles in the wrong position.
-
-  // number of tiles out of place
+  /**
+   * Returns the board's total "Manhattan distance", i.e. the sum of all tiles'
+   * row + column distance to their goal positions
+   * 
+   * @return sum of all tiles' Manhattan Distances
+   */
   public int manhattan() {
     return distance((row, col) -> {
       int properRow = properRow(tiles[row][col]);
@@ -56,11 +62,12 @@ public class Board {
     });
   }
 
-  // The Manhattan distance between a board and the goal board is the sum of the
-  // Manhattan distances (sum of the vertical and horizontal distance) from the
-  // tiles to their goal positions.
-
-  // sum of Manhattan distances between tiles and goal
+  /**
+   * Returns the Hamming distance, i.e. the total number of tiles in the wrong
+   * position
+   * 
+   * @return the Hamming distance of the Board
+   */
   public int hamming() {
     return distance((row, col) -> {
       int properRow = properRow(tiles[row][col]);
@@ -69,12 +76,23 @@ public class Board {
     });
   }
 
-  // is this board the goal board?
+  /**
+   * Has the goal state been reached?
+   * 
+   * @return boolean value representing whether the board has reached its goal
+   *         state
+   */
   public boolean isGoal() {
     return mDist == 0;
   }
 
-  // does this board equal y?
+  /**
+   * Are two Boards identical?
+   * 
+   * @param y the object being compared
+   * @return boolean value representing whether the passed object is a board
+   *         identical to the instance
+   */
   public boolean equals(Object y) {
     if (y == this)
       return true;
@@ -88,20 +106,15 @@ public class Board {
     }
   }
 
-  // Neighboring boards. The neighbors() method returns an iterable containing the
-  // neighbors of the board. Depending on the location of the blank square, a
-  // board can have 2, 3, or 4 neighbors.
-
-  // all neighboring boards
+  /**
+   * Returns the "neighbors" of a board state, i.e. all possible moves from the
+   * instance's current board state
+   *
+   * @return iterable collection of all board neighbors (between 2 - 4 neighbors
+   *         possible from any given state)
+   */
   public Iterable<Board> neighbors() {
     ResizingArrayQueue<Board> q = new ResizingArrayQueue<>();
-
-    // iterate through the array
-    // check if that space is 0
-    // if so, add neighbors by checking left right up and down for a value
-    // if tehre is a value, swap it to a tmp array and add it to new board
-    // add taht board to the iterable
-
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
         if (tiles[i][j] == 0) {
@@ -117,17 +130,13 @@ public class Board {
     return q;
   }
 
-  private Board getNeighbor(int emptyRow, int emptyCol, int swpRow, int swpCol) {
-    int[][] neighborTiles = new int[n][n];
-    for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++)
-        neighborTiles[i][j] = tiles[i][j];
-    neighborTiles[emptyRow][emptyCol] = neighborTiles[swpRow][swpCol];
-    neighborTiles[swpRow][swpCol] = 0;
-    return new Board(neighborTiles);
-  }
-
-  // a board that is obtained by exchanging any pair of tiles
+  /**
+   * Returns a board "twin", i.e. a board obtained by exchanging any pair of
+   * tiles. Either a board or its twin will be unsolveable.
+   * 
+   * @return the board "twin" obtained by swapping the 0th and 1st columns of the
+   *         0th row
+   */
   public Board twin() {
     Board twin;
     int swp;
@@ -143,14 +152,17 @@ public class Board {
   }
 
   // ************************ PRIVATE METHODS ************************
+  // helper method to determine the goal row of the passed tile
   private int properRow(int tile) {
     return (tile - 1) / n;
   }
 
+  // helper method to determine the goal column of the passed tile
   private int properCol(int tile) {
     return (tile - 1) % n;
   }
 
+  // helper method to facilitate the Manhattan and Hamming distance methods
   private int distance(BiFunction<Integer, Integer, Integer> func) {
     int count = 0;
     for (int row = 0; row < n; row++)
@@ -159,10 +171,19 @@ public class Board {
     return count;
   }
 
-  // Performance requirements. Your implementation should support all Board
-  // methods in time proportional to n2 (or better) in the worst case.
+  // helper function for neighbors()
+  // performs the neighbor swap
+  private Board getNeighbor(int emptyRow, int emptyCol, int swpRow, int swpCol) {
+    int[][] neighborTiles = new int[n][n];
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
+        neighborTiles[i][j] = tiles[i][j];
+    neighborTiles[emptyRow][emptyCol] = neighborTiles[swpRow][swpCol];
+    neighborTiles[swpRow][swpCol] = 0;
+    return new Board(neighborTiles);
+  }
 
-  // unit testing (not graded)
+  // ************************ unit testing ************************
   public static void main(String[] args) {
     // test out-of-place tiles
     int[] row1 = { 0, 1, 2 };
