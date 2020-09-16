@@ -3,7 +3,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Board {
   private int[][] tiles;
-  private int dimension, hDist, mDist;
+  private int n, hDist, mDist;
   // Constructor. You may assume that the constructor receives an n-by-n array
   // containing the n2 integers between 0 and n2 − 1, where 0 represents the blank
   // square. You may also assume that 2 ≤ n < 128.
@@ -11,10 +11,10 @@ public class Board {
   // create a board from an n-by-n array of tiles,
   // where tiles[row][col] = tile at (row, col)
   public Board(int[][] tiles) {
-    dimension = tiles.length;
-    this.tiles = new int[dimension][dimension];
-    for (int i = 0; i < dimension; i++) {
-      for (int j = 0; j < dimension; j++) {
+    n = tiles.length;
+    this.tiles = new int[n][n];
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
         this.tiles[i][j] = tiles[i][j];
       }
     }
@@ -25,12 +25,12 @@ public class Board {
   // string representation of this board
   // public String toString() {
   // String output = "";
-  // for (int i = 0; i < dimension; i++) {
-  // for (int j = 0; j < dimension; j++) {
+  // for (int i = 0; i < n; i++) {
+  // for (int j = 0; j < n; j++) {
   // output += tiles[i][j];
   // // if j mod tiles[i].length == tiles[i].length - 1 add newline
   // // else add space
-  // output += j % dimension == dimension - 1 ? (i % dimension == dimension - 1 ?
+  // output += j % n == n - 1 ? (i % n == n - 1 ?
   // "" : "\n") : " ";
   // }
   // }
@@ -39,9 +39,9 @@ public class Board {
 
   public String toString() {
     StringBuilder s = new StringBuilder();
-    s.append(dimension + "\n");
-    for (int i = 0; i < dimension; i++) {
-      for (int j = 0; j < dimension; j++) {
+    s.append(n + "\n");
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
         s.append(String.format("%2d ", tiles[i][j]));
       }
       s.append("\n");
@@ -49,9 +49,9 @@ public class Board {
     return s.toString();
   }
 
-  // board dimension n
+  // board n n
   public int dimension() {
-    return dimension;
+    return n;
   }
 
   // Hamming and Manhattan distances. To measure how close a board is to the goal
@@ -124,17 +124,17 @@ public class Board {
 
   // ************************ PRIVATE METHODS ************************
   private int properRow(int tile) {
-    return (tile - 1) / dimension;
+    return (tile - 1) / n;
   }
 
   private int properCol(int tile) {
-    return (tile - 1) % dimension;
+    return (tile - 1) % n;
   }
 
   private int distance(BiFunction<Integer, Integer, Integer> func) {
     int count = 0;
-    for (int row = 0; row < dimension; row++) {
-      for (int col = 0; col < dimension; col++) {
+    for (int row = 0; row < n; row++) {
+      for (int col = 0; col < n; col++) {
         count += tiles[row][col] == 0 ? 0 : func.apply(row, col);
       }
     }
@@ -154,7 +154,7 @@ public class Board {
 
     Board b = new Board(tiles);
     StdOut.println(b.toString());
-    StdOut.println("dimension:\t3 == " + b.dimension());
+    StdOut.println("n:\t3 == " + b.dimension());
     StdOut.println("manhattan:\t12 == " + b.manhattan());
     StdOut.println("hamming:\t8 == " + b.hamming());
     StdOut.println("isGoal():\tfalse == " + b.isGoal());
@@ -168,7 +168,7 @@ public class Board {
     int[][] tiles2 = { row4, row5, row6 };
     Board b2 = new Board(tiles2);
     StdOut.println(b2.toString());
-    StdOut.println("dimension:\t3 == " + b2.dimension());
+    StdOut.println("n:\t3 == " + b2.dimension());
     StdOut.println("manhattan:\t0 == " + b2.manhattan());
     StdOut.println("hamming:\t0 == " + b2.hamming());
     StdOut.println("isGoal():\ttrue == " + b2.isGoal());
