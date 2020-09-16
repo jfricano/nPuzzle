@@ -22,12 +22,12 @@ public class Board {
   // string representation of this board
   public String toString() {
     String output = "";
-    for (int i = 0; i < tiles.length; i++) {
-      for (int j = 0; j < tiles[i].length; j++) {
+    for (int i = 0; i < dimension; i++) {
+      for (int j = 0; j < dimension; j++) {
         output += tiles[i][j];
         // if j mod tiles[i].length == tiles[i].length - 1 add newline
         // else add space
-        output += j % tiles[i].length == tiles[i].length - 1 ? '\n' : "  ";
+        output += j % dimension == dimension - 1 ? (i % dimension == dimension - 1 ? "" : "\n") : "  ";
       }
     }
     return output;
@@ -53,21 +53,25 @@ public class Board {
   // tiles in the wrong position.
 
   // number of tiles out of place
-  // public int hamming() {
-  //   int count = 0;
-  //   for (int i = 0; i < dimension(); i++) {
-  //     if (i == dimension() - 1 && tiles[i][dimension() - 1] != 0) {
-  //       count++;
-  //     }
-  //     for (int j = 0; j < tiles[i].length; j++) {
-  //       if (i == dimension() - 1 && j == dimension() - 1)
-  //         continue;
-  //       if (i == dimension() - 1 && j == dimension() - 1 && tiles[i][j] != 0)
-  //         count++;
-  //     }
-  //   }
-  //   return count;
-  // }
+  public int manhattan() {
+    int count = 0;
+    int properRow, properCol, tile;
+
+    for (int row = 0; row < dimension; row++) {
+      for (int col = 0; col < dimension; col++) {
+        tile = tiles[row][col];
+        if (tile == 0) {
+          properRow = dimension - 1;
+          properCol = dimension - 1;
+        } else {
+          properRow = (tile - 1) / dimension;
+          properCol = (tile - 1) % dimension;
+        }
+        count += Math.abs(row - properRow) + Math.abs(col - properCol);
+      }
+    }
+    return count;
+  }
 
   // The Manhattan distance between a board and the goal board is the sum of the
   // Manhattan distances (sum of the vertical and horizontal distance) from the
@@ -75,32 +79,20 @@ public class Board {
 
   // sum of Manhattan distances between tiles and goal
   // public int manhattan() {
-  //   int count = 0;
-  //   for (int i = 0; i < tiles.length; i++) {
-  //     for (int j = 0; j < tiles[i].length; j++) {
-  //       // if tile is 0
-  //       if (tiles[i][j] == 0) count += (tiles.length - i) + (tiles[i].length - j);
-  //       // if tile is not 0
-  //     }
-  //   }
-  //   return count;
+  // int count = 0;
+  // for (int i = 0; i < tiles.length; i++) {
+  // for (int j = 0; j < tiles[i].length; j++) {
+  // // if tile is 0
+  // if (tiles[i][j] == 0) count += (tiles.length - i) + (tiles[i].length - j);
+  // // if tile is not 0
+  // }
+  // }
+  // return count;
   // }
 
   // is this board the goal board?
   public boolean isGoal() {
-    int lastPos = dimension - 1;
-    for (int i = 0; i < dimension; i++) {
-      if (i == lastPos && tiles[i][lastPos] != 0) {
-        return false;
-      }
-      for (int j = 0; j < dimension; j++) {
-        if (i == lastPos && j == lastPos)
-          continue;
-        if (i == lastPos && j == lastPos && tiles[i][j] != 0)
-          return false;
-      }
-    }
-    return true;
+    return manhattan() == 0;
   }
 
   // does this board equal y?
@@ -134,7 +126,7 @@ public class Board {
 
   // unit testing (not graded)
   public static void main(String[] args) {
-    // test constructor, toSTring()
+    // test out-of-place tiles
     int[] row1 = { 0, 1, 2 };
     int[] row2 = { 3, 4, 5 };
     int[] row3 = { 6, 7, 8 };
@@ -142,22 +134,24 @@ public class Board {
 
     Board b = new Board(tiles);
     StdOut.println(b.toString());
-
-    // test dimension
     StdOut.println("dimension:  " + b.dimension());
+    StdOut.println("manhattan: 9 == " + b.manhattan());
+    StdOut.println("isGoal(): false == " + b.isGoal());
+
     StdOut.println();
 
-    // test isGoal
-    StdOut.println("isGoal(): false == " + b.isGoal());
+    // test in-place tiles
     int[] row4 = { 1, 2, 3 };
     int[] row5 = { 4, 5, 6 };
     int[] row6 = { 7, 8, 0 };
     int[][] tiles2 = { row4, row5, row6 };
-    b = new Board(tiles2);
-    StdOut.println("isGoal(): true == " + b.isGoal());
+    Board b2 = new Board(tiles2);
+    StdOut.println(b2.toString());
+    StdOut.println("dimension:  " + b2.dimension());
+    StdOut.println("manhattan: 0 == " + b2.manhattan());
+    StdOut.println("isGoal(): true == " + b2.isGoal());
 
     // test hamming
-    // test manhattan
     // test equals
     // test neighbors
     // test twin
