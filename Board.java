@@ -14,11 +14,7 @@ public class Board {
    */
   public Board(final int[][] tiles) {
     n = tiles.length;
-    this.tiles = new int[n][n];
-    for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++)
-        this.tiles[i][j] = tiles[i][j];
-    // hDist = hamming();
+    this.tiles = arrCpy(tiles);
     mDist = manhattan();
   }
 
@@ -141,11 +137,7 @@ public class Board {
   public Board twin() {
     Board twin;
     int swp;
-    final int[][] newBoard = new int[n][n];
-
-    for (int row = 0; row < n; row++)
-      for (int col = 0; col < n; col++)
-        newBoard[row][col] = this.tiles[row][col];
+    final int[][] newBoard = arrCpy(tiles);
     twin = new Board(newBoard);
     swp = twin.tiles[0][0];
     twin.tiles[0][0] = twin.tiles[0][1];
@@ -176,13 +168,20 @@ public class Board {
   // helper function for neighbors()
   // performs the neighbor swap
   private Board getNeighbor(final int emptyRow, final int emptyCol, final int swpRow, final int swpCol) {
-    final int[][] neighborTiles = new int[n][n];
-    for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++)
-        neighborTiles[i][j] = tiles[i][j];
+    final int[][] neighborTiles = arrCpy(tiles);
     neighborTiles[emptyRow][emptyCol] = neighborTiles[swpRow][swpCol];
     neighborTiles[swpRow][swpCol] = 0;
     return new Board(neighborTiles);
+  }
+
+  // returns a copy of the input array passed as argument
+  private static int[][] arrCpy(final int[][] src) {
+    final int n = src.length;
+    final int[][] cpy = new int[n][n];
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
+        cpy[i][j] = src[i][j];
+    return cpy;
   }
 
   // ************************ unit testing ************************
@@ -233,13 +232,22 @@ public class Board {
     StdOut.println();
 
     // test neighbors
+    StdOut.println("NEIGHBORS!");
+    int i = 0;
+    for (final Board board : b.neighbors()) {
+      StdOut.println("Starting:");
+      StdOut.println(b.toString());
+      StdOut.println("Neighbor" + (++i) + ":");
+      StdOut.println(board.toString());
+    }
+    
+    StdOut.println("MORE NEIGHBORS!");
     final int[] row10 = { 4, 1, 2 };
     final int[] row11 = { 8, 0, 5 };
     final int[] row12 = { 6, 7, 3 };
     final int[][] tiles4 = { row10, row11, row12 };
     final Board b4 = new Board(tiles4);
-    StdOut.println("NEIGHBORS!");
-    int i = 0;
+    i = 0;
     for (final Board board : b4.neighbors()) {
       StdOut.println("Starting:");
       StdOut.println(b4.toString());
