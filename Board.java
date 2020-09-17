@@ -1,11 +1,13 @@
 import java.util.Arrays;
 import java.util.function.BiFunction;
+
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.ResizingArrayQueue;
 
 public class Board {
   private final int[][] tiles;
-  private final int n, mDist;
+  private final int n;
+  private final int hDist, mDist;
 
   /**
    * Initializes an n-puzzle board
@@ -15,7 +17,8 @@ public class Board {
   public Board(final int[][] tiles) {
     n = tiles.length;
     this.tiles = arrCpy(tiles);
-    mDist = manhattan();
+    mDist = calcManhattan();
+    hDist = calcHamming();
   }
 
   /**
@@ -51,11 +54,7 @@ public class Board {
    * @return sum of all tiles' Manhattan Distances
    */
   public int manhattan() {
-    return distance((row, col) -> {
-      final int properRow = properRow(tiles[row][col]);
-      final int properCol = properCol(tiles[row][col]);
-      return Math.abs(row - properRow) + Math.abs(col - properCol);
-    });
+    return mDist;
   }
 
   /**
@@ -65,11 +64,7 @@ public class Board {
    * @return the Hamming distance of the Board
    */
   public int hamming() {
-    return distance((row, col) -> {
-      final int properRow = properRow(tiles[row][col]);
-      final int properCol = properCol(tiles[row][col]);
-      return row != properRow || col != properCol ? 1 : 0;
-    });
+    return hDist;
   }
 
   /**
@@ -79,7 +74,7 @@ public class Board {
    *         state
    */
   public boolean isGoal() {
-    return mDist == 0;
+    return manhattan() == 0;
   }
 
   /**
@@ -146,6 +141,22 @@ public class Board {
   }
 
   // ************************ PRIVATE METHODS ************************
+  private int calcManhattan() {
+    return distance((row, col) -> {
+      final int properRow = properRow(tiles[row][col]);
+      final int properCol = properCol(tiles[row][col]);
+      return Math.abs(row - properRow) + Math.abs(col - properCol);
+    });
+  }
+
+  private int calcHamming() {
+    return distance((row, col) -> {
+      final int properRow = properRow(tiles[row][col]);
+      final int properCol = properCol(tiles[row][col]);
+      return row != properRow || col != properCol ? 1 : 0;
+    });
+  }
+
   // helper method to determine the goal row of the passed tile
   private int properRow(final int tile) {
     return (tile - 1) / n;
