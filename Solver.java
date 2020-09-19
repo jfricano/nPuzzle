@@ -75,18 +75,28 @@ public class Solver {
 
   private Node solve() {
     MinPQ<Node> pq = new MinPQ<>(prioritize());
+    MinPQ<Node> pqTwin = new MinPQ<>(prioritize());
     Node searchNode = initial;
+    Board twinBoard = initial.board.twin();
+    Node twinNode = new Node(twinBoard, null, 0);
     pq.insert(searchNode);
+    pqTwin.insert(twinNode);
 
-    while (!searchNode.board.isGoal()) {
+    while (!searchNode.board.isGoal() && !twinNode.board.isGoal()) {
       searchNode = pq.delMin();
       for (Board b : searchNode.board.neighbors()) {
         if (searchNode.previous == null || !b.equals(searchNode.previous.board)) {
           pq.insert(new Node(b, searchNode, searchNode.moves + 1));
         } 
       }
+      twinNode = pqTwin.delMin();
+      for (Board b : twinNode.board.neighbors()) {
+        if (twinNode.previous == null || !b.equals(twinNode.previous.board)) {
+          pqTwin.insert(new Node(b, twinNode, twinNode.moves + 1));
+        } 
+      }
     }
-
+    if (twinNode.board.isGoal()) searchNode = null;
     return searchNode;
   }
 
