@@ -74,9 +74,20 @@ public class Solver {
   }
 
   private Node solve() {
-    // use moves + 1
+    MinPQ<Node> pq = new MinPQ<>(prioritize());
+    Node searchNode = initial;
+    pq.insert(searchNode);
 
-    return null;
+    while (!searchNode.board.isGoal()) {
+      searchNode = pq.delMin();
+      for (Board b : searchNode.board.neighbors()) {
+        if (searchNode.previous == null || !b.equals(searchNode.previous.board)) {
+          pq.insert(new Node(b, searchNode, searchNode.moves + 1));
+        } 
+      }
+    }
+
+    return searchNode;
   }
 
   // test client (see below)
