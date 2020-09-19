@@ -1,7 +1,19 @@
+/******************************************************************************
+ *  Compilation:  javac Board.java
+ *  Dependencies: java.util.Arrays
+ *                java.util.function.BiFunction
+ *                edu.princeton.cs.algs4.ResizingArrayQueue
+ * 
+ *  Implements an n-puzzle game board (to be solved by Solver.java)
+ * 
+ *  Note:  This class requires Princeton University's algs4.jar library
+ *
+ ******************************************************************************/
+
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
-import edu.princeton.cs.algs4.StdOut;
+// import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.ResizingArrayQueue;
 
 public class Board {
@@ -194,75 +206,75 @@ public class Board {
     return cpy;
   }
 
-  // ************************ unit testing ************************
-  public static void main(final String[] args) {
-    // test out-of-place tiles
-    final int[] row1 = { 0, 1, 2 };
-    final int[] row2 = { 3, 4, 5 };
-    final int[] row3 = { 6, 7, 8 };
-    final int[][] tiles = { row1, row2, row3 };
+  // ************************ UNIT TESTING ************************
+  // public static void main(final String[] args) {
+  //   // test out-of-place tiles
+  //   final int[] row1 = { 0, 1, 2 };
+  //   final int[] row2 = { 3, 4, 5 };
+  //   final int[] row3 = { 6, 7, 8 };
+  //   final int[][] tiles = { row1, row2, row3 };
 
-    final Board b = new Board(tiles);
-    StdOut.println(b.toString());
-    StdOut.println("n:\t3 == " + b.dimension());
-    StdOut.println("manhattan:\t12 == " + b.manhattan());
-    StdOut.println("hamming:\t8 == " + b.hamming());
-    StdOut.println("isGoal():\tfalse == " + b.isGoal());
+  //   final Board b = new Board(tiles);
+  //   StdOut.println(b.toString());
+  //   StdOut.println("n:\t3 == " + b.dimension());
+  //   StdOut.println("manhattan:\t12 == " + b.manhattan());
+  //   StdOut.println("hamming:\t8 == " + b.hamming());
+  //   StdOut.println("isGoal():\tfalse == " + b.isGoal());
 
-    StdOut.println();
+  //   StdOut.println();
 
-    // test in-place tiles
-    final int[] row4 = { 1, 2, 3 };
-    final int[] row5 = { 4, 5, 6 };
-    final int[] row6 = { 7, 8, 0 };
-    final int[][] tiles2 = { row4, row5, row6 };
-    final Board b2 = new Board(tiles2);
-    StdOut.println(b2.toString());
-    StdOut.println("n:\t3 == " + b2.dimension());
-    StdOut.println("manhattan:\t0 == " + b2.manhattan());
-    StdOut.println("hamming:\t0 == " + b2.hamming());
-    StdOut.println("isGoal():\ttrue == " + b2.isGoal());
+  //   // test in-place tiles
+  //   final int[] row4 = { 1, 2, 3 };
+  //   final int[] row5 = { 4, 5, 6 };
+  //   final int[] row6 = { 7, 8, 0 };
+  //   final int[][] tiles2 = { row4, row5, row6 };
+  //   final Board b2 = new Board(tiles2);
+  //   StdOut.println(b2.toString());
+  //   StdOut.println("n:\t3 == " + b2.dimension());
+  //   StdOut.println("manhattan:\t0 == " + b2.manhattan());
+  //   StdOut.println("hamming:\t0 == " + b2.hamming());
+  //   StdOut.println("isGoal():\ttrue == " + b2.isGoal());
 
-    StdOut.println();
+  //   StdOut.println();
 
-    // test equals()
-    final int[] row7 = { 0, 1, 2 };
-    final int[] row8 = { 3, 4, 5 };
-    final int[] row9 = { 6, 7, 8 };
-    final int[][] tiles3 = { row7, row8, row9 };
-    final Board b3 = new Board(tiles3);
-    StdOut.println("equals():\tfalse == " + b.equals(b2));
-    StdOut.println("equals():\ttrue == " + b.equals(b3));
+  //   // test equals()
+  //   final int[] row7 = { 0, 1, 2 };
+  //   final int[] row8 = { 3, 4, 5 };
+  //   final int[] row9 = { 6, 7, 8 };
+  //   final int[][] tiles3 = { row7, row8, row9 };
+  //   final Board b3 = new Board(tiles3);
+  //   StdOut.println("equals():\tfalse == " + b.equals(b2));
+  //   StdOut.println("equals():\ttrue == " + b.equals(b3));
 
-    StdOut.println();
+  //   StdOut.println();
 
-    // test twins
-    StdOut.println("TWINS!\n" + b.toString() + '\n' + b.twin().toString());
+  //   // test twins
+  //   StdOut.println("TWINS!\n" + b.toString() + '\n' + b.twin().toString());
 
-    StdOut.println();
+  //   StdOut.println();
 
-    // test neighbors
-    StdOut.println("NEIGHBORS!");
-    int i = 0;
-    for (final Board board : b.neighbors()) {
-      StdOut.println("Starting:");
-      StdOut.println(b.toString());
-      StdOut.println("Neighbor" + (++i) + ":");
-      StdOut.println(board.toString());
-    }
+  //   // test neighbors
+  //   StdOut.println("NEIGHBORS!");
+  //   int i = 0;
+  //   for (final Board board : b.neighbors()) {
+  //     StdOut.println("Starting:");
+  //     StdOut.println(b.toString());
+  //     StdOut.println("Neighbor" + (++i) + ":");
+  //     StdOut.println(board.toString());
+  //   }
 
-    StdOut.println("MORE NEIGHBORS!");
-    final int[] row10 = { 4, 1, 2 };
-    final int[] row11 = { 8, 0, 5 };
-    final int[] row12 = { 6, 7, 3 };
-    final int[][] tiles4 = { row10, row11, row12 };
-    final Board b4 = new Board(tiles4);
-    i = 0;
-    for (final Board board : b4.neighbors()) {
-      StdOut.println("Starting:");
-      StdOut.println(b4.toString());
-      StdOut.println("Neighbor" + (++i) + ":");
-      StdOut.println(board.toString());
-    }
-  }
+  //   StdOut.println("MORE NEIGHBORS!");
+  //   final int[] row10 = { 4, 1, 2 };
+  //   final int[] row11 = { 8, 0, 5 };
+  //   final int[] row12 = { 6, 7, 3 };
+  //   final int[][] tiles4 = { row10, row11, row12 };
+  //   final Board b4 = new Board(tiles4);
+  //   i = 0;
+  //   for (final Board board : b4.neighbors()) {
+  //     StdOut.println("Starting:");
+  //     StdOut.println(b4.toString());
+  //     StdOut.println("Neighbor" + (++i) + ":");
+  //     StdOut.println(board.toString());
+  //   }
+  // }
 }
