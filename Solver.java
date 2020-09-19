@@ -2,8 +2,20 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
 
 public class Solver {
-  Board b;
+  private Node initial;
+  private Node solution;
 
+  private class Node {
+    Board board;
+    Node previous;
+    int moves, manhattan, priority;
+
+    public Node(Board b, Node previous, int moves) {
+      board = b;
+      this.previous = previous;
+      this.moves = moves;
+    }
+  }
   // find a solution to the initial board (using the A* algorithm)
   public Solver(Board initial) {
     if (initial == null) throw new IllegalArgumentException();
