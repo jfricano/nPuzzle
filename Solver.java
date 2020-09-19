@@ -1,64 +1,186 @@
+/******************************************************************************
+ *  Compilation:  javac Solver.java
+ *  Execution:    java Solver input.txt
+ *  Dependencies: java.util.Comparator
+ *                edu.princeton.cs.algs4.In
+ *                edu.princeton.cs.algs4.MinPQ
+ *                edu.princeton.cs.algs4.ResizingArrayStack
+ *                edu.princeton.cs.algs4.StdOut
+ *  
+ *  Implementation to solve n-puzzle
+ *
+ *  Note:  This class requires Princeton University's algs4.jar library
+ * 
+ ******************************************************************************/
+
+import java.util.Comparator;
+
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.ResizingArrayStack;
+import edu.princeton.cs.algs4.StdOut;
 
 public class Solver {
-  Board b;
+  private final Node initial;     // initial game node
+  private final Node end;         // solution game node (null if no solution)
+  private final ResizingArrayStack<Board> solution;   // sequence of moves from initial to end
 
-  // find a solution to the initial board (using the A* algorithm)
-  public Solver(Board initial) {
+  // ****************** PUBLIC METHODS ******************
+  /**
+   * Initializes an n-puzzle board solver
+   * 
+   * @param initial the initial n-puzzle board object
+   */
+  public Solver(final Board initial) {
     if (initial == null) throw new IllegalArgumentException();
-    b = new Board;
+    this.initial = new Node(initial, null, 0);
+    end = solve();
+    solution = getSolution();
   }
 
-  // To detect such situations, use the fact that boards are divided into two
-  // equivalence classes with respect to reachability:
-  // Those that can lead to the goal board
-  // Those that can lead to the goal board if we modify the initial board by
-  // swapping any pair of tiles (the blank square is not a tile).
-
-  // is the initial board solvable? (see below)
+  /**
+   * is the initial board solvable?
+   * 
+   * @return is the initial board solvable?
+   *  */ 
   public boolean isSolvable() {
-    MinPQ j = new MinPQ();
-    return true;
+    return solution != null;
   }
 
-  // min number of moves to solve initial board; -1 if unsolvable
+  /**
+   * Minimum number of moves to solve initial board (-1 if unsolvable)
+   * 
+   * @return min number of moves to solve initial board; -1 if unsolvable
+   */
   public int moves() {
-    if (!isSolvable())
-      return -1;
-    else
-      return 0;
+    if (solution == null) return -1;
+    else return end.moves;
   }
 
-  // sequence of boards in a shortest solution; null if unsolvable
+  /**
+   * The shortest sequence of moves to solve the given n-puzzle game board
+   * 
+   * @return shortest sequence of moves to solve the given n-puzzle game board
+   */
   public Iterable<Board> solution() {
-    if (!isSolvable())
-      return null;
+    return solution;
   }
 
-  // test client (see below)
-  public static void main(String[] args) {
+  // ****************** PRIVATE HELPER METHODS ******************
+  // crawls up the game tree
+  // from the end node
+  // to the root node (initial board)
+  // returns stack to solution property
+  private ResizingArrayStack<Board> getSolution() {
+    if (end == null) return null;
+
+    final ResizingArrayStack<Board> result = new ResizingArrayStack<>();
+    Node addNode = end;
+    while (addNode != null) {
+      result.push(addNode.board);
+      addNode = addNode.previous;
+    }
+    return result;
+  }
+
+  // the prioritization comparator function
+  // prioritizes nodes w/ lowest (manhattan distance + moves so far)
+  private Comparator<Node> prioritize() {
+    return (final Node a, final Node b) -> {
+      if (a.priority < b.priority)
+        return -1;
+      else if (a.priority > b.priority)
+        return 1;
+      else
+        return 0;
+    };
+  }
+
+  // solve applies the A* algorithm to the initial gameboard
+  // until either the initial board or its twin leads to a solution
+  // all boards satisfy the property that only a board or its twin is solvable
+  // thus, we test both to determine if a board is solvable
+  private Node solve() {
+    // priority queues to hold the incoming nodes
+    final MinPQ<Node> pq = new MinPQ<>(prioritize());
+    final MinPQ<Node> pqTwin = new MinPQ<>(prioritize());
+
+    Node searchNode = initial; // the board node currently being processed
+    final Board twinBoard = searchNode.board.twin();
+    Node twinNode = new Node(twinBoard, null, 0); // the twin node being processed
+
+    pq.insert(searchNode);
+    pqTwin.insert(twinNode);
+
+    // the A* algorithm
+    // dequeues the minimum
+    // adds the neighbors of the dequeued board
+    // depends on priority function returned from Comparator method prioritize()
+    while (!searchNode.board.isGoal() && !twinNode.board.isGoal()) {
+      // search given board
+      searchNode = pq.delMin();
+      for (final Board b : searchNode.board.neighbors())
+        // memory optimization:
+        // only add a neighbor if not equivalent to the searchNode's parent node
+        if (searchNode.previous == null || !b.equals(searchNode.previous.board))
+          pq.insert(new Node(b, searchNode, searchNode.moves + 1));
+
+      // search twin node
+      twinNode = pqTwin.delMin();
+      for (final Board b : twinNode.board.neighbors())
+        if (twinNode.previous == null || !b.equals(twinNode.previous.board)) 
+          pqTwin.insert(new Node(b, twinNode, twinNode.moves + 1));
+    }
+    if (twinNode.board.isGoal()) searchNode = null;
+    return searchNode;
+  }
+
+    // ****************** PRIVATE INNER CLASS ******************
+    // boards are stored as nodes so to build a tree of nodes
+    // once the goal node is reached, can trace the solution via the previous property
+    private class Node {
+      Board board;          // n-puzzle game board
+      Node previous;        // previous board node in sequence
+      int moves, priority;  // number of moves to get to current board
+                            // manhattan priority of board (manhattan distance + moves)
+  
+      public Node(final Board b, final Node previous, final int moves) {
+        board = b;
+        this.previous = previous;
+        this.moves = moves;
+        priority = this.moves + board.manhattan();
+      }
+    }
+    
+    // ****************** TEST CLIENT ******************
+    /**
+     * Solves an n-puzzle game board
+     * Logs to console the sequence of moves leading to solution
+     * Logs 'No solution possible' if no solution
+     * 
+     * @param args  the name of the text file containing the initial game board
+     *              refer to Board class to see game board format
+     */
+    public static void main(final String[] args) {
     // create initial board from file
-    In in = new In(args[0]);
-    int n = in.readInt();
-    int[][] tiles = new int[n][n];
+    final In in = new In(args[0]);
+    final int n = in.readInt();
+    final int[][] tiles = new int[n][n];
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
         tiles[i][j] = in.readInt();
-    Board initial = new Board(tiles);
+    final Board initial = new Board(tiles);
 
     // solve the puzzle
-    Solver solver = new Solver(initial);
+    final Solver solver = new Solver(initial);
 
     // print solution to standard output
     if (!solver.isSolvable())
       StdOut.println("No solution possible");
     else {
       StdOut.println("Minimum number of moves = " + solver.moves());
-      for (Board board : solver.solution())
+      for (final Board board : solver.solution())
         StdOut.println(board);
     }
-
   }
-
 }
