@@ -7,7 +7,7 @@ import edu.princeton.cs.algs4.ResizingArrayQueue;
 public class Board {
   private final int[][] tiles;
   private final int n;
-  private final int hDist, mDist;
+  // private final int hDist, mDist;
 
   /**
    * Initializes an n-puzzle board
@@ -17,8 +17,8 @@ public class Board {
   public Board(final int[][] tiles) {
     n = tiles.length;
     this.tiles = arrCpy(tiles);
-    mDist = calcManhattan();
-    hDist = calcHamming();
+    // mDist = calcManhattan();
+    // hDist = calcHamming();
   }
 
   /**
@@ -54,7 +54,11 @@ public class Board {
    * @return sum of all tiles' Manhattan Distances
    */
   public int manhattan() {
-    return mDist;
+    return distance((row, col) -> {
+      final int properRow = properRow(tiles[row][col]);
+      final int properCol = properCol(tiles[row][col]);
+      return Math.abs(row - properRow) + Math.abs(col - properCol);
+    });
   }
 
   /**
@@ -64,7 +68,11 @@ public class Board {
    * @return the Hamming distance of the Board
    */
   public int hamming() {
-    return hDist;
+    return distance((row, col) -> {
+      final int properRow = properRow(tiles[row][col]);
+      final int properCol = properCol(tiles[row][col]);
+      return row != properRow || col != properCol ? 1 : 0;
+    });
   }
 
   /**
@@ -74,7 +82,7 @@ public class Board {
    *         state
    */
   public boolean isGoal() {
-    return manhattan() == 0;
+    return hamming() == 0;
   }
 
   /**
@@ -130,32 +138,42 @@ public class Board {
    *         0th row
    */
   public Board twin() {
-    Board twin;
     int swp;
-    final int[][] newBoard = arrCpy(tiles);
-    twin = new Board(newBoard);
-    swp = twin.tiles[0][0];
-    twin.tiles[0][0] = twin.tiles[0][1];
-    twin.tiles[0][1] = swp;
-    return twin;
+    final int[][] twinTiles = arrCpy(tiles);
+
+    if (twinTiles[0][0] != 0) {
+      swp = twinTiles[0][0];
+      if (twinTiles[1][0] != 0) {
+        twinTiles[0][0] = twinTiles[1][0];
+        twinTiles[1][0] = swp;
+      } else {
+        twinTiles[0][0] = twinTiles[1][1];
+        twinTiles[1][1] = swp;
+      }
+    } else {
+      swp = twinTiles[0][1];
+      twinTiles[0][1] = twinTiles[1][0];
+      twinTiles[1][0] = swp;
+    }
+    return new Board(twinTiles);
   }
 
   // ************************ PRIVATE METHODS ************************
-  private int calcManhattan() {
-    return distance((row, col) -> {
-      final int properRow = properRow(tiles[row][col]);
-      final int properCol = properCol(tiles[row][col]);
-      return Math.abs(row - properRow) + Math.abs(col - properCol);
-    });
-  }
+  // private int calcManhattan() {
+  // return distance((row, col) -> {
+  // final int properRow = properRow(tiles[row][col]);
+  // final int properCol = properCol(tiles[row][col]);
+  // return Math.abs(row - properRow) + Math.abs(col - properCol);
+  // });
+  // }
 
-  private int calcHamming() {
-    return distance((row, col) -> {
-      final int properRow = properRow(tiles[row][col]);
-      final int properCol = properCol(tiles[row][col]);
-      return row != properRow || col != properCol ? 1 : 0;
-    });
-  }
+  // private int calcHamming() {
+  // return distance((row, col) -> {
+  // final int properRow = properRow(tiles[row][col]);
+  // final int properCol = properCol(tiles[row][col]);
+  // return row != properRow || col != properCol ? 1 : 0;
+  // });
+  // }
 
   // helper method to determine the goal row of the passed tile
   private int properRow(final int tile) {
@@ -251,7 +269,7 @@ public class Board {
       StdOut.println("Neighbor" + (++i) + ":");
       StdOut.println(board.toString());
     }
-    
+
     StdOut.println("MORE NEIGHBORS!");
     final int[] row10 = { 4, 1, 2 };
     final int[] row11 = { 8, 0, 5 };
