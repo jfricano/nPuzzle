@@ -83,27 +83,14 @@ public class Solver {
     return result;
   }
 
-  // the prioritization comparator function
-  // prioritizes nodes w/ lowest (manhattan distance + moves so far)
-  private Comparator<Node> prioritize() {
-    return (final Node a, final Node b) -> {
-      if (a.priority < b.priority)
-        return -1;
-      else if (a.priority > b.priority)
-        return 1;
-      else
-        return 0;
-    };
-  }
-
   // solve applies the A* algorithm to the initial gameboard
   // until either the initial board or its twin leads to a solution
   // all boards satisfy the property that only a board or its twin is solvable
   // thus, we test both to determine if a board is solvable
   private Node solve() {
     // priority queues to hold the incoming nodes
-    final MinPQ<Node> pq = new MinPQ<>(prioritize());
-    final MinPQ<Node> pqTwin = new MinPQ<>(prioritize());
+    final MinPQ<Node> pq = new MinPQ<>();
+    final MinPQ<Node> pqTwin = new MinPQ<>();
 
     Node searchNode = initial; // the board node currently being processed
     final Board twinBoard = searchNode.board.twin();
@@ -138,7 +125,7 @@ public class Solver {
     // ****************** PRIVATE INNER CLASS ******************
     // boards are stored as nodes so to build a tree of nodes
     // once the goal node is reached, can trace the solution via the previous property
-    private class Node {
+    private class Node implements Comparable<Node> {
       Board board;          // n-puzzle game board
       Node previous;        // previous board node in sequence
       int moves, priority;  // number of moves to get to current board
@@ -149,6 +136,10 @@ public class Solver {
         this.previous = previous;
         this.moves = moves;
         priority = this.moves + board.manhattan();
+      }
+
+      public int compareTo(Node cmpNode) {
+        return this.priority - cmpNode.priority;
       }
     }
     
