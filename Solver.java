@@ -28,6 +28,7 @@ public class Solver {
   // ****************** PUBLIC METHODS ******************
   // find a solution to the initial board (using the A* algorithm)
   public Solver(final Board initial) {
+    if (initial == null) throw new IllegalArgumentException();
     this.initial = new Node(initial, null, 0);
     end = solve();
     solution = getSolution();
