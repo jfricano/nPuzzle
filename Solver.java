@@ -13,8 +13,6 @@
  * 
  ******************************************************************************/
 
-import java.util.Comparator;
-
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.ResizingArrayStack;
@@ -23,7 +21,6 @@ import edu.princeton.cs.algs4.StdOut;
 public class Solver {
   private final Node initial;     // initial game node
   private final Node end;         // solution game node (null if no solution)
-  private final ResizingArrayStack<Board> solution;   // sequence of moves from initial to end
 
   // ****************** PUBLIC METHODS ******************
   /**
@@ -35,7 +32,6 @@ public class Solver {
     if (initial == null) throw new IllegalArgumentException();
     this.initial = new Node(initial, null, 0);
     end = solve();
-    solution = getSolution();
   }
 
   /**
@@ -44,7 +40,7 @@ public class Solver {
    * @return is the initial board solvable?
    *  */ 
   public boolean isSolvable() {
-    return solution != null;
+    return end != null;
   }
 
   /**
@@ -53,8 +49,8 @@ public class Solver {
    * @return min number of moves to solve initial board; -1 if unsolvable
    */
   public int moves() {
-    if (solution == null) return -1;
-    else return end.moves;
+    if (end == null) return -1;
+    return end.moves;
   }
 
   /**
@@ -62,16 +58,10 @@ public class Solver {
    * 
    * @return shortest sequence of moves to solve the given n-puzzle game board
    */
-  public Iterable<Board> solution() {
-    return solution;
-  }
-
-  // ****************** PRIVATE HELPER METHODS ******************
   // crawls up the game tree
-  // from the end node
-  // to the root node (initial board)
-  // returns stack to solution property
-  private ResizingArrayStack<Board> getSolution() {
+  // from the end node to the root node (initial board)
+  // builds and returns stack to solution property
+  public Iterable<Board> solution() {
     if (end == null) return null;
 
     final ResizingArrayStack<Board> result = new ResizingArrayStack<>();
@@ -83,6 +73,7 @@ public class Solver {
     return result;
   }
 
+  // ****************** PRIVATE METHODS ******************
   // solve applies the A* algorithm to the initial gameboard
   // until either the initial board or its twin leads to a solution
   // all boards satisfy the property that only a board or its twin is solvable
@@ -122,7 +113,7 @@ public class Solver {
     return searchNode;
   }
 
-    // ****************** PRIVATE INNER CLASS ******************
+    // ****************** PRIVATE NODE CLASS ******************
     // boards are stored as nodes so to build a tree of nodes
     // once the goal node is reached, can trace the solution via the previous property
     private class Node implements Comparable<Node> {
@@ -149,8 +140,8 @@ public class Solver {
      * Logs to console the sequence of moves leading to solution
      * Logs 'No solution possible' if no solution
      * 
-     * @param args  the name of the text file containing the initial game board
-     *              refer to Board class to see game board format
+     * @param args  the name of the text file containing the initial game board. 
+     *              Refer to Board class to see game board format
      */
     public static void main(final String[] args) {
     // create initial board from file
