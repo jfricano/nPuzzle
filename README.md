@@ -1,4 +1,4 @@
-# nPuzzle
+# n-Puzzle
 Project for Princeton's Data Structures and Algorithms course.  The topic for this week is Priority Queues.
 
 Note:  These files depend on libraries imported from Princeton University's open-source edu.princeton.cs.algs4 package.  
