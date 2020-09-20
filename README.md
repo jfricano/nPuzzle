@@ -9,7 +9,7 @@ Note:  These files depend on libraries imported from Princeton University's open
   <li><a href="https://algs4.cs.princeton.edu/code/algs4.jar">Dowload Princeton's algs4.jar package</a></li>
 </ul>
 
-Assignment:  Write a program to solve the 8-puzzle problem (and its natural generalizations) using the A* search algorithm.
+Assignment:  Write a program to solve the 8-puzzle problem (and its natural generalizations) using the <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A<sup>*</sup> search algorithm</a>.
 
 <b>The problem.</b> The 8-puzzle is a sliding puzzle that is played on a 3-by-3 grid with 8 square tiles labeled 1 through 8, plus a blank square. The goal is to rearrange the tiles so that they are in row-major order, using as few moves as possible. You are permitted to slide tiles either horizontally or vertically into the blank square. The following diagram shows a sequence of moves from an initial board (left) to the goal board (right).
 
@@ -55,7 +55,7 @@ A board is representing by an nxn two-dimensional array.  Each tile in the board
 
 Solver.java
 ================================
-An implementation of the <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A<sup>*</sup> search algorithm</a> to solve n-by-n slider puzzles providing the API below.  The Solver will find the solution to the given n-puzzle problem utilizing the shortest sequence of moves necessary to achieve the solution.  The solver also detects and reports on unsolvable puzzles.
+An implementation of the A<sup>*</sup> search algorithm to solve n-by-n slider puzzles providing the API below.  The Solver will find the solution to the given n-puzzle problem utilizing the shortest sequence of moves necessary to achieve the solution.  The solver also detects and reports on unsolvable puzzles.
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial)
