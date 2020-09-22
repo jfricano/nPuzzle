@@ -27,6 +27,7 @@ public class Solver {
    * Initializes an n-puzzle board solver
    * 
    * @param initial the initial n-puzzle board object
+   * @throws IllegalArgumentException if @code {initial} is null
    */
   public Solver(final Board initial) {
     if (initial == null) throw new IllegalArgumentException();
@@ -129,8 +130,8 @@ public class Solver {
         priority = this.moves + board.manhattan();
       }
 
-      public int compareTo(Node cmpNode) {
-        return this.priority - cmpNode.priority;
+      public int compareTo(Node that) {
+        return this.priority - that.priority;
       }
     }
     
