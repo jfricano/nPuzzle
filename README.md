@@ -1,15 +1,10 @@
-# n-Puzzle
-Project for Princeton's Data Structures and Algorithms course.  The topic for this week is Priority Queues.
-
-Note:  These files depend on libraries imported from Princeton University's open-source edu.princeton.cs.algs4 package (included in this repo as algs4.jar).  
-
 <ul>
   <li><a target="_blank" href="https://algs4.cs.princeton.edu/code/" >Info and how to install environment</a></li>
   <li><a href="https://algs4.cs.princeton.edu/code/javadoc/" target="_blank" rel="noopener noreferrer">algs4.jar Documentation</a></li>
   <li><a href="https://algs4.cs.princeton.edu/code/algs4.jar">Dowload Princeton's algs4.jar package</a></li>
 </ul>
 
-Assignment:  Write a program to solve the 8-puzzle problem (and its natural generalizations) using the <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A<sup>*</sup> search algorithm</a>.
+Challenge:  Write a program to solve the 8-puzzle problem (and its natural generalizations) using the <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A<sup>*</sup> search algorithm</a>.
 
 <b>The problem.</b> The 8-puzzle is a sliding puzzle that is played on a 3-by-3 grid with 8 square tiles labeled 1 through 8, plus a blank square. The goal is to rearrange the tiles so that they are in row-major order, using as few moves as possible. You are permitted to slide tiles either horizontally or vertically into the blank square. The following diagram shows a sequence of moves from an initial board (left) to the goal board (right).
 
