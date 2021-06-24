@@ -1,7 +1,7 @@
 <ul>
   <li><a target="_blank" href="https://algs4.cs.princeton.edu/code/" >Info and how to install environment</a></li>
   <li><a href="https://algs4.cs.princeton.edu/code/javadoc/" target="_blank" rel="noopener noreferrer">algs4.jar Documentation</a></li>
-  <li><a href="https://algs4.cs.princeton.edu/code/algs4.jar">Dowload Princeton's algs4.jar package</a></li>
+  <li><a href="https://algs4.cs.princeton.edu/code/algs4.jar">Download algs4.jar package</a></li>
 </ul>
 
 Challenge:  Write a program to solve the 8-puzzle problem (and its natural generalizations) using the <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A<sup>*</sup> search algorithm</a>.
