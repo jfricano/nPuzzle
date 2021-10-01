@@ -44,7 +44,7 @@ A board is representing by an nxn two-dimensional array.  Each tile in the board
     // a board that is obtained by exchanging any pair of tiles
     public Board twin()
 
-    // unit testing (not graded)
+    // unit testing
     public static void main(String[] args)
 
 
